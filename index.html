@@ -10,9 +10,12 @@ const wave = createWaveform()
 
 const osc = new Tone.Oscillator()
 osc.frequency.value = 440
-osc.type = 'sine'
+osc.type = 'custom'
+osc.volume.value = 0.001
+osc.partials = [1, 0.2, 0.01, 0.2, 1]
 osc.toDestination()
 osc.connect(wave)
+
 
 function start () {
   osc.start()
@@ -26,7 +29,7 @@ function update (e) {
   const freq = nn.map(e.x, 0, nn.width, 220, 1760)
   const vol = nn.map(e.y, 0, nn.height, 0, -80)
   osc.frequency.value = freq
-  osc.volume.value = vol
+  osc.partials = [1, 0.2, vol, 0.2, 1]
 }
 
 nn.on('mousedown', start)
