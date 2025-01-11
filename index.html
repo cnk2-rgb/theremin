@@ -1,0 +1,36 @@
+<body></body>
+<script src="https://unpkg.com/tone"></script>
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://algorithmicmusic.online/js/create-spectrum.js"></script>
+<script src="https://algorithmicmusic.online/js/create-waveform.js"></script>
+<script>
+/* global Tone, nn, d3, createWaveform, createSpectrum */
+const wave = createWaveform()
+
+const osc = new Tone.Oscillator()
+osc.frequency.value = 440
+osc.type = 'sine'
+osc.toDestination()
+osc.connect(wave)
+
+function start () {
+  osc.start()
+}
+
+function stop () {
+  osc.stop()
+}
+
+function update (e) {
+  const freq = nn.map(e.x, 0, nn.width, 220, 1760)
+  const vol = nn.map(e.y, 0, nn.height, 0, -80)
+  osc.frequency.value = freq
+  osc.volume.value = vol
+}
+
+nn.on('mousedown', start)
+nn.on('mouseup', stop)
+nn.on('mousemove', update)
+
+</script>
